@@ -61,6 +61,7 @@ public class CourseServiceIMPL implements CourseService {
             for (Course course : courses) {
                 CourseDTO courseDTO = new CourseDTO();
                 courseDTO.setId(course.getId());
+                courseDTO.setDepartment(course.getDepartment());
                 courseDTO.setCourseName(course.getCourseName());
                 courseDTO.setFees(course.getFees());
                 courseDTO.setMaxStudentCount(course.getMaxStudentCount());

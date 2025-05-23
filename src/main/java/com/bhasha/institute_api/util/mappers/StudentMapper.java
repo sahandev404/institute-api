@@ -1,8 +1,6 @@
 package com.bhasha.institute_api.util.mappers;
 
-import com.bhasha.institute_api.dto.CourseDTO;
 import com.bhasha.institute_api.dto.StudentDTO;
-import com.bhasha.institute_api.entity.Course;
 import com.bhasha.institute_api.entity.Student;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

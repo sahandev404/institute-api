@@ -3,6 +3,7 @@ package com.bhasha.institute_api.controller;
 import com.bhasha.institute_api.dto.StudentDTO;
 import com.bhasha.institute_api.service.StudentService;
 import com.bhasha.institute_api.util.StandardResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping
-    public ResponseEntity<StandardResponse> addStudent(@RequestBody StudentDTO studentDTO) {
+    public ResponseEntity<StandardResponse> addStudent(@Valid @RequestBody StudentDTO studentDTO) {
         String message = studentService.addStudent(studentDTO);
         return new ResponseEntity<StandardResponse>(
                 new StandardResponse(201,"Success",message),

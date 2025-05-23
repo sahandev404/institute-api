@@ -28,5 +28,4 @@ public class StudentDTO {
     @Max(value = 10, message = "Contact number must be less than 10 digits")
     private String contactNumber;
     private String department;
-    private Course course;
 }

@@ -30,8 +30,8 @@ public class CourseServiceIMPL implements CourseService {
                 return "Course already exists!";
             }else {
                 Course course = new Course();
+                course.setDepartment(courseDTO.getDepartment());
                 course.setCourseName(courseDTO.getCourseName());
-                course.setId(courseDTO.getId());
                 course.setFees(courseDTO.getFees());
                 course.setMaxStudentCount(courseDTO.getMaxStudentCount());
 

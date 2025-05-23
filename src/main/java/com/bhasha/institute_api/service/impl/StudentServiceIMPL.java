@@ -1,7 +1,9 @@
 package com.bhasha.institute_api.service.impl;
 
 import com.bhasha.institute_api.dto.StudentDTO;
+import com.bhasha.institute_api.entity.Course;
 import com.bhasha.institute_api.entity.Student;
+import com.bhasha.institute_api.repository.CourseRepository;
 import com.bhasha.institute_api.repository.StudentRepository;
 import com.bhasha.institute_api.service.StudentService;
 import com.bhasha.institute_api.util.mappers.MapStruck;
@@ -19,24 +21,38 @@ public class StudentServiceIMPL implements StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private CourseRepository courseRepository;
+
 //    @Autowired
 //    private MapStruck mapStruck;
 
     @Override
-    public String addStudent(StudentDTO studentDTO) {
+    public String addStudent(StudentDTO studentDTO, Long id) {
         try {
 //            Student student = mapStruck.stdDtoToEntity(studentDTO);
-            Student student = new Student();
-            student.setFirstName(studentDTO.getFirstName());
-            student.setLastName(studentDTO.getLastName());
-            student.setBirthday(studentDTO.getBirthday());
-            student.setAddress(studentDTO.getAddress());
-            student.setContactNumber(studentDTO.getContactNumber());
-            student.setDepartment(studentDTO.getDepartment());
-            student.setCourse(studentDTO.getCourse());
-            studentRepository.save(student);
-            log.info("Student saved: {}", student);
-            return studentDTO.getFirstName() + " Student saved!";
+            if (studentRepository.existsById(id)) {
+                log.error("Student already exists with ID: {}", id);
+                return "Student already exists!";
+            }else {
+                Course course = courseRepository.findById(id).orElse(null);
+                if (course == null) {
+                    log.error("Course not found with ID: {}", id);
+                    return "Course not found!";
+                }else {
+                    Student student = new Student();
+                    student.setFirstName(studentDTO.getFirstName());
+                    student.setLastName(studentDTO.getLastName());
+                    student.setBirthday(studentDTO.getBirthday());
+                    student.setAddress(studentDTO.getAddress());
+                    student.setContactNumber(studentDTO.getContactNumber());
+                    student.setDepartment(studentDTO.getDepartment());
+                    student.setCourse(course);
+                    studentRepository.save(student);
+                    log.info("Student saved: {}", student);
+                    return studentDTO.getFirstName() + " Student saved!";
+                }
+            }
         } catch (Exception e) {
             log.error("Error saving student: {}", e.getMessage());
             return "Error saving student: " + e.getMessage();
@@ -58,7 +74,6 @@ public class StudentServiceIMPL implements StudentService {
             studentDTO.setAddress(student.getAddress());
             studentDTO.setContactNumber(student.getContactNumber());
             studentDTO.setDepartment(student.getDepartment());
-            studentDTO.setCourse(student.getCourse());
             log.info("Student DTO created: {}", studentDTO);
             return studentDTO;
         } catch (Exception e) {
@@ -83,7 +98,6 @@ public class StudentServiceIMPL implements StudentService {
                 studentDTO.setAddress(student.getAddress());
                 studentDTO.setContactNumber(student.getContactNumber());
                 studentDTO.setDepartment(student.getDepartment());
-                studentDTO.setCourse(student.getCourse());
                 studentDTOs.add(studentDTO);
             }
             return studentDTOs;

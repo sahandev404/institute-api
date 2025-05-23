@@ -16,9 +16,10 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @PostMapping
-    public ResponseEntity<StandardResponse> addStudent(@RequestBody StudentDTO studentDTO) {
-        String message = studentService.addStudent(studentDTO);
+    @PostMapping("/{id}")
+    public ResponseEntity<StandardResponse> addStudent(@RequestBody StudentDTO studentDTO,
+                                                       @PathVariable Long id) {
+        String message = studentService.addStudent(studentDTO, id);
         return new ResponseEntity<StandardResponse>(
                 new StandardResponse(201,"Success",message),
                 HttpStatus.CREATED

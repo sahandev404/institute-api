@@ -4,7 +4,7 @@ import com.bhasha.institute_api.dto.CourseDTO;
 import com.bhasha.institute_api.entity.Course;
 import com.bhasha.institute_api.repository.CourseRepository;
 import com.bhasha.institute_api.service.CourseService;
-import com.bhasha.institute_api.util.mappers.MapStruck;
+import com.bhasha.institute_api.util.mappers.CourseMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,8 @@ public class CourseServiceIMPL implements CourseService {
     @Autowired
     private CourseRepository courseRepository;
 
-//    @Autowired
-//    private MapStruck mapStruck;
+    @Autowired
+    private CourseMapper courseMapper;
 
     @Override
     public String addCourse(CourseDTO courseDTO) {
@@ -29,14 +29,13 @@ public class CourseServiceIMPL implements CourseService {
                 log.error("Course already exists with ID: {}", courseDTO.getId());
                 return "Course already exists!";
             }else {
-                Course course = new Course();
-                course.setDepartment(courseDTO.getDepartment());
-                course.setCourseName(courseDTO.getCourseName());
-                course.setFees(courseDTO.getFees());
-                course.setMaxStudentCount(courseDTO.getMaxStudentCount());
+//                Course course = new Course();
+//                course.setDepartment(courseDTO.getDepartment());
+//                course.setCourseName(courseDTO.getCourseName());
+//                course.setFees(courseDTO.getFees());
+//                course.setMaxStudentCount(courseDTO.getMaxStudentCount());
 
-                // Assuming mapStruck is a utility to convert DTO to Entity
-//                Course course = mapStruck.courseDtoToEntity(courseDTO);
+                Course course = courseMapper.DtoToEntity(courseDTO);
                 courseRepository.save(course);
                 log.info("Course saved successfully: {}", course.getCourseName());
                 return course.getCourseName() + " Course saved!";
@@ -56,18 +55,18 @@ public class CourseServiceIMPL implements CourseService {
             return List.of();
         }else {
             log.info("All courses retrieved successfully: {}", courses);
-//            return mapStruck.courseEntityToDtoList(courses);
-            List<CourseDTO> courseDTOList = new ArrayList<CourseDTO>();
-            for (Course course : courses) {
-                CourseDTO courseDTO = new CourseDTO();
-                courseDTO.setId(course.getId());
-                courseDTO.setDepartment(course.getDepartment());
-                courseDTO.setCourseName(course.getCourseName());
-                courseDTO.setFees(course.getFees());
-                courseDTO.setMaxStudentCount(course.getMaxStudentCount());
-                courseDTOList.add(courseDTO);
-            }
-            return courseDTOList;
+            return courseMapper.EntityListToDtoList(courses);
+//            List<CourseDTO> courseDTOList = new ArrayList<CourseDTO>();
+//            for (Course course : courses) {
+//                CourseDTO courseDTO = new CourseDTO();
+//                courseDTO.setId(course.getId());
+//                courseDTO.setDepartment(course.getDepartment());
+//                courseDTO.setCourseName(course.getCourseName());
+//                courseDTO.setFees(course.getFees());
+//                courseDTO.setMaxStudentCount(course.getMaxStudentCount());
+//                courseDTOList.add(courseDTO);
+//            }
+//            return courseDTOList;
         }
     }
 }

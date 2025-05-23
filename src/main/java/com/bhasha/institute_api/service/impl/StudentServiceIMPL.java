@@ -6,12 +6,11 @@ import com.bhasha.institute_api.entity.Student;
 import com.bhasha.institute_api.repository.CourseRepository;
 import com.bhasha.institute_api.repository.StudentRepository;
 import com.bhasha.institute_api.service.StudentService;
-import com.bhasha.institute_api.util.mappers.MapStruck;
+import com.bhasha.institute_api.util.mappers.StudentMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -24,13 +23,12 @@ public class StudentServiceIMPL implements StudentService {
     @Autowired
     private CourseRepository courseRepository;
 
-//    @Autowired
-//    private MapStruck mapStruck;
+    @Autowired
+    private StudentMapper studentMapper;
 
     @Override
     public String addStudent(StudentDTO studentDTO, Long id) {
         try {
-//            Student student = mapStruck.stdDtoToEntity(studentDTO);
             if (studentRepository.existsById(id)) {
                 log.error("Student already exists with ID: {}", id);
                 return "Student already exists!";
@@ -40,14 +38,15 @@ public class StudentServiceIMPL implements StudentService {
                     log.error("Course not found with ID: {}", id);
                     return "Course not found!";
                 }else {
-                    Student student = new Student();
-                    student.setFirstName(studentDTO.getFirstName());
-                    student.setLastName(studentDTO.getLastName());
-                    student.setBirthday(studentDTO.getBirthday());
-                    student.setAddress(studentDTO.getAddress());
-                    student.setContactNumber(studentDTO.getContactNumber());
-                    student.setDepartment(studentDTO.getDepartment());
-                    student.setCourse(course);
+                    Student student = studentMapper.DtoToEntity(studentDTO);
+//                    Student student = new Student();
+//                    student.setFirstName(studentDTO.getFirstName());
+//                    student.setLastName(studentDTO.getLastName());
+//                    student.setBirthday(studentDTO.getBirthday());
+//                    student.setAddress(studentDTO.getAddress());
+//                    student.setContactNumber(studentDTO.getContactNumber());
+//                    student.setDepartment(studentDTO.getDepartment());
+//                    student.setCourse(course);
                     studentRepository.save(student);
                     log.info("Student saved: {}", student);
                     return studentDTO.getFirstName() + " Student saved!";
@@ -65,15 +64,15 @@ public class StudentServiceIMPL implements StudentService {
             Student student = studentRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Student not found"));
             log.info("Student found: {}", student);
-//            StudentDTO studentDTO = mapStruck.stdEntityToDTO(student);
-            StudentDTO studentDTO = new StudentDTO();
-            studentDTO.setId(student.getId());
-            studentDTO.setFirstName(student.getFirstName());
-            studentDTO.setLastName(student.getLastName());
-            studentDTO.setBirthday(student.getBirthday());
-            studentDTO.setAddress(student.getAddress());
-            studentDTO.setContactNumber(student.getContactNumber());
-            studentDTO.setDepartment(student.getDepartment());
+            StudentDTO studentDTO = studentMapper.EntityToDTO(student);
+//            StudentDTO studentDTO = new StudentDTO();
+//            studentDTO.setId(student.getId());
+//            studentDTO.setFirstName(student.getFirstName());
+//            studentDTO.setLastName(student.getLastName());
+//            studentDTO.setBirthday(student.getBirthday());
+//            studentDTO.setAddress(student.getAddress());
+//            studentDTO.setContactNumber(student.getContactNumber());
+//            studentDTO.setDepartment(student.getDepartment());
             log.info("Student DTO created: {}", studentDTO);
             return studentDTO;
         } catch (Exception e) {
@@ -87,19 +86,19 @@ public class StudentServiceIMPL implements StudentService {
         try{
             List<Student> students = studentRepository.findAll();
             log.info("All students retrieved: {}", students);
-//            List<StudentDTO> studentDTOs = mapStruck.stdEntityToDtoList(students);
-            List<StudentDTO> studentDTOs = new ArrayList<>();
-            for (Student student : students) {
-                StudentDTO studentDTO = new StudentDTO();
-                studentDTO.setId(student.getId());
-                studentDTO.setFirstName(student.getFirstName());
-                studentDTO.setLastName(student.getLastName());
-                studentDTO.setBirthday(student.getBirthday());
-                studentDTO.setAddress(student.getAddress());
-                studentDTO.setContactNumber(student.getContactNumber());
-                studentDTO.setDepartment(student.getDepartment());
-                studentDTOs.add(studentDTO);
-            }
+            List<StudentDTO> studentDTOs = studentMapper.EntityListToDtoList(students);
+//            List<StudentDTO> studentDTOs = new ArrayList<>();
+//            for (Student student : students) {
+//                StudentDTO studentDTO = new StudentDTO();
+//                studentDTO.setId(student.getId());
+//                studentDTO.setFirstName(student.getFirstName());
+//                studentDTO.setLastName(student.getLastName());
+//                studentDTO.setBirthday(student.getBirthday());
+//                studentDTO.setAddress(student.getAddress());
+//                studentDTO.setContactNumber(student.getContactNumber());
+//                studentDTO.setDepartment(student.getDepartment());
+//                studentDTOs.add(studentDTO);
+//            }
             return studentDTOs;
         } catch (Exception e) {
             log.error("Error retrieving all students: {}", e.getMessage());

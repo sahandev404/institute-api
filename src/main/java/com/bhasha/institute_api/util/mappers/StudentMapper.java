@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {CourseMapper.class})
 public interface StudentMapper {
     @Mapping(target = "id", ignore = true)
     Student DtoToEntity(StudentDTO studentDTO);

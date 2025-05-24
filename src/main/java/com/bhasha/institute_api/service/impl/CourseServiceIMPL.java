@@ -28,12 +28,6 @@ public class CourseServiceIMPL implements CourseService {
                 log.error("Course already exists with ID: {}", courseDTO.getId());
                 return "Course already exists!";
             }else {
-//                Course course = new Course();
-//                course.setDepartment(courseDTO.getDepartment());
-//                course.setCourseName(courseDTO.getCourseName());
-//                course.setFees(courseDTO.getFees());
-//                course.setMaxStudentCount(courseDTO.getMaxStudentCount());
-
                 Course course = courseMapper.DtoToEntity(courseDTO);
                 courseRepository.save(course);
                 log.info("Course saved successfully: {}", course.getCourseName());
@@ -55,17 +49,6 @@ public class CourseServiceIMPL implements CourseService {
         }else {
             log.info("All courses retrieved successfully: {}", courses);
             return courseMapper.EntityListToDtoList(courses);
-//            List<CourseDTO> courseDTOList = new ArrayList<CourseDTO>();
-//            for (Course course : courses) {
-//                CourseDTO courseDTO = new CourseDTO();
-//                courseDTO.setId(course.getId());
-//                courseDTO.setDepartment(course.getDepartment());
-//                courseDTO.setCourseName(course.getCourseName());
-//                courseDTO.setFees(course.getFees());
-//                courseDTO.setMaxStudentCount(course.getMaxStudentCount());
-//                courseDTOList.add(courseDTO);
-//            }
-//            return courseDTOList;
         }
     }
 }

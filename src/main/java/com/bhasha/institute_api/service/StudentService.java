@@ -5,7 +5,7 @@ import com.bhasha.institute_api.dto.StudentDTO;
 import java.util.List;
 
 public interface StudentService {
-    String addStudent(StudentDTO studentDTO, Long id);
+    String addStudent(StudentDTO studentDTO, Long courseId);
 
     StudentDTO getStudentById(Long id);
 
